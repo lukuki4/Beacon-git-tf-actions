@@ -42,11 +42,11 @@ env:
 
     - name: terraform init
       run: terraform init
-      working-directory: ${{ env.ROOT_PATH }}
+      #working-directory: ${{ env.ROOT_PATH }}
 
     - name: terraform Plan
       run: terraform plan 
-      working-directory: ${{ env.ROOT_PATH }}
+      #working-directory: ${{ env.ROOT_PATH }}
       
 
   terraform_apply:
