@@ -1,6 +1,4 @@
-
-
-name: 'Terraform'
+name: 'Becsme-Mig'
 
 on:
   push:
@@ -36,9 +34,12 @@ env:
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
+      uses: hashicorp/lukuki4/Beacon-git-tf-actions@master
+
       with:
-        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+        tf_actions_version: 0.14.8
+        tf_actions_subcommand: 'fmt'
+        tf_actions_working_dir: "./terraform"
 
     - name: terraform init
       run: terraform init
@@ -81,4 +82,3 @@ env:
       run: terraform apply -auto-approve
       if: ${{inputs.tf_destroy}} == false
       #working-directory: ${{ env.ROOT_PATH }}
-      
