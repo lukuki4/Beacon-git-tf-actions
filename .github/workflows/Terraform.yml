@@ -44,7 +44,7 @@ jobs:
       working-directory: ${{ env.ROOT_PATH }}
 
     - name: terraform Plan
-      run: terraform plan 
+      run: terraform plan
       working-directory: ${{ env.ROOT_PATH }}
       
 
@@ -52,7 +52,7 @@ jobs:
     name: 'terraform apply'
     needs: [terraform_plan]
     runs-on: ubuntu-latest
-    environment: production
+    environment: migration-worflow
     
     defaults:
       run:
