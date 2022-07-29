@@ -18,13 +18,13 @@ jobs:
 defaults:
   run:
     shell: bash
-env: 
-  ROOT_PATH: '${{github.workspace}}/actions/Terraform'
-  ARM_CLIENT_ID: ${{secrets.AZURE_AD_CLIENT_ID}}
-  ARM_CLIENT_SECRET: ${{secrets.AZURE_AD_CLIENT_SECRET}}
-  ARM_SUBSCRIPTION_ID: ${{secrets.AZURE_AD_SUBSCRIPTION_ID}}
-  ARM_TENANT_ID: ${{secrets.AZURE_AD_TENANT_ID}}
-  STAGE_NAME: production
+    env: 
+     ROOT_PATH: '${{github.workspace}}/actions/Terraform'
+     ARM_CLIENT_ID: ${{secrets.AZURE_AD_CLIENT_ID}}
+     ARM_CLIENT_SECRET: ${{secrets.AZURE_AD_CLIENT_SECRET}}
+     ARM_SUBSCRIPTION_ID: ${{secrets.AZURE_AD_SUBSCRIPTION_ID}}
+     ARM_TENANT_ID: ${{secrets.AZURE_AD_TENANT_ID}}
+     STAGE_NAME: production
 
     steps:
     # Checkout the repository to the GitHub Actions runner
