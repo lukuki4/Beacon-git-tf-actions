@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "/actions/terraform-azure/*"
+      - "/actions/Terraform/*"
   pull_request:
     branches:
       - main
@@ -17,7 +17,7 @@ defaults:
   run:
     shell: bash
 env: 
-  ROOT_PATH: '${{github.workspace}}/actions/terraform-azure'
+  ROOT_PATH: '${{github.workspace}}/actions/Terraform'
   ARM_CLIENT_ID: ${{secrets.AZURE_AD_CLIENT_ID}}
   ARM_CLIENT_SECRET: ${{secrets.AZURE_AD_CLIENT_SECRET}}
   ARM_SUBSCRIPTION_ID: ${{secrets.AZURE_AD_SUBSCRIPTION_ID}}
@@ -25,7 +25,7 @@ env:
   STAGE_NAME: production
 
 jobs:
-  terraform:
+  terraform_plan:
     name: 'terraform plan'
     runs-on: ubuntu-latest
     
