@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - "/actions/SME-MIGRATION/*"
+      - "../SME-MIGRATION/*"
   pull_request:
     branches:
       - main
