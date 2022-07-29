@@ -9,7 +9,7 @@ on:
   #workflow_dispatch: #this attribute will enable the manual run to the pipeline
   
 
-# Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+# Use the Bash shellfjfbf regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
 defaults:
   run:
     shell: bash
