@@ -1,10 +1,15 @@
+
 name: 'terraform-Azure'
 
 on:
   push:
     branches:
-    - main
+      - main
+    paths:
+      - "/actions/SME-MIGRATION/*"
   pull_request:
+    branches:
+      - main
   #workflow_dispatch: #this attribute will enable the manual run to the pipeline
   
 
@@ -12,57 +17,71 @@ on:
 defaults:
   run:
     shell: bash
+env: 
+  ROOT_PATH: '${{github.workspace}}/actions/SME_MIGRATION'
+  ARM_CLIENT_ID: ${{secrets.AZURE_AD_CLIENT_ID}}
+  ARM_CLIENT_SECRET: ${{secrets.AZURE_AD_CLIENT_SECRET}}
+  ARM_SUBSCRIPTION_ID: ${{secrets.AZURE_AD_SUBSCRIPTION_ID}}
+  ARM_TENANT_ID: ${{secrets.AZURE_AD_TENANT_ID}}
+  STAGE_NAME: production
 
 jobs:
-  terraform:
-    name: 'Terraform'
-    env:
-      ARM_CLIENT_ID: ${{secrets.AZURE_AD_CLIENT_ID}}
-      ARM_CLIENT_SECRET: ${{secrets.AZURE_AD_CLIENT_SECRET}}
-      ARM_SUBSCRIPTION_ID: ${{secrets.AZURE_AD_SUBSCRIPTION_ID}}
-      ARM_TENANT_ID: ${{secrets.AZURE_AD_TENANT_ID}}
+  terraform_plan:
+    name: 'terraform plan'
     runs-on: ubuntu-latest
-    environment: dev
     
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-      uses: ./.github/lukuki4/Beacon-git-tf-actions 
 
-    - name: 'terraform format'
-      uses: hashicorp/lukuki4/Beacon-git-tf-actions 
+    - name: Setup terraform
+      uses: hashicorp/setup-terraform@v1
       with:
-        tf_actions_version: 0.14.8
-        tf_actions_subcommand: 'fmt'
-        tf_actions_working_dir: "./SME_MIGRATION"
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
   
-    - name: 'Terraform Init'
-      uses: hashicorp/lukuki4/Beacon-git-tf-actions 
-      with:
-        tf_actions_version: 0.14.8
-        tf_actions_subcommand: 'init'
-        tf_actions_working_dir: "./SME_MIGRATION"
+    - name: terraform init
+      run: terraform init
+      working-directory: ${{ env.ROOT_PATH }}
 
-    - name: 'Terraform Validate'
-      uses: hashicorp/lukuki4/Beacon-git-tf-actions 
-      with:
-        tf_actions_version: 0.14.8
-        tf_actions_subcommand: 'validate'
-        tf_actions_working_dir: "./SME_MIGRATION"
-
-    - name: 'Terraform Plan'
-      uses: hashicorp/lukuki4/Beacon-git-tf-actions 
-      with:
-        tf_actions_version: 0.14.8
-        tf_actions_subcommand: 'plan'
-        tf_actions_working_dir: "./SME_MIGRATION"
-
-    - name: 'Terraform Apply'
-      uses: hashicorp/lukuki4/Beacon-git-tf-actions 
-      with:
-        tf_actions_version: 0.14.8
-        tf_actions_subcommand: 'apply'
-        tf_actions_working_dir: "./SME_MIGRATION"
+    - name: terraform Plan
+      run: terraform plan 
+      working-directory: ${{ env.ROOT_PATH }}
       
 
-  
+  terraform_apply:
+    name: 'terraform apply'
+    needs: [terraform_plan]
+    runs-on: ubuntu-latest
+    environment: production
+    
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+ 
+    - name: terraform Init
+      run: terraform init
+      working-directory: ${{ env.ROOT_PATH }}
+
+    - name: terraform Init
+      run: echo 'var -> ${{inputs.tf_destroy}}'
+      working-directory: ${{ env.ROOT_PATH }}
+
+      #github.ref == 'refs/heads/main' && github.event_name == 'push'
+    - name: terraform Apply
+      run: terraform apply -auto-approve
+      if: ${{inputs.tf_destroy}} == false
+      working-directory: ${{ env.ROOT_PATH }}
+
+    # - name: terraform destroy
+    #   run: terraform destroy -auto-approve
+    #   if: ${{inputs.tf_destroy}} == true
+    #   working-directory: ${{ env.ROOT_PATH }}
