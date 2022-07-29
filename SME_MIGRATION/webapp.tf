@@ -19,7 +19,6 @@ resource "azurerm_app_service" "beaconsmeinc" {
   site_config {
     dotnet_framework_version = "v6.0"
     always_on                = false
-    scm_type = "VSTSRM"
     ftps_state               = "Disabled"
     min_tls_version          = "1.2"
     remote_debugging_enabled = true
