@@ -4,12 +4,8 @@ name: 'terraform-Azure'
 on:
   push:
     branches:
-      - main
-    paths:
-      - "../SME-MIGRATION/*"
+    - main
   pull_request:
-    branches:
-      - main
   #workflow_dispatch: #this attribute will enable the manual run to the pipeline
   
 
@@ -18,7 +14,7 @@ defaults:
   run:
     shell: bash
 env: 
-  ROOT_PATH: '${{github.workspace}}/actions/SME_MIGRATION'
+  ROOT_PATH: '../SME_MIGRATION'
   ARM_CLIENT_ID: ${{secrets.AZURE_AD_CLIENT_ID}}
   ARM_CLIENT_SECRET: ${{secrets.AZURE_AD_CLIENT_SECRET}}
   ARM_SUBSCRIPTION_ID: ${{secrets.AZURE_AD_SUBSCRIPTION_ID}}
