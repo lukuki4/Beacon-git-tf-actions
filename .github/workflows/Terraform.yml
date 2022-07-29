@@ -1,42 +1,43 @@
-name: 'Becsme-Mig'
+name: 'terraform-Azure'
 
 on:
   push:
     branches:
       - main
     paths:
-      - "/actions/Terraform/*"
+      - "/actions/terraform-azure/*"
   pull_request:
     branches:
       - main
-jobs:
-  terraform_plan:
-    name: 'terraform plan'
-    runs-on: ubuntu-latest
+  workflow_dispatch: #this attribute will enable the manual run to the pipeline
+  
 
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+# Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
 defaults:
   run:
     shell: bash
-    env: 
-     ROOT_PATH: '${{github.workspace}}/actions/Terraform'
-     ARM_CLIENT_ID: ${{secrets.AZURE_AD_CLIENT_ID}}
-     ARM_CLIENT_SECRET: ${{secrets.AZURE_AD_CLIENT_SECRET}}
-     ARM_SUBSCRIPTION_ID: ${{secrets.AZURE_AD_SUBSCRIPTION_ID}}
-     ARM_TENANT_ID: ${{secrets.AZURE_AD_TENANT_ID}}
-     STAGE_NAME: production
+env: 
+  ROOT_PATH: '${{github.workspace}}/actions/terraform-azure'
+  ARM_CLIENT_ID: ${{secrets.AZURE_AD_CLIENT_ID}}
+  ARM_CLIENT_SECRET: ${{secrets.AZURE_AD_CLIENT_SECRET}}
+  ARM_SUBSCRIPTION_ID: ${{secrets.AZURE_AD_SUBSCRIPTION_ID}}
+  ARM_TENANT_ID: ${{secrets.AZURE_AD_TENANT_ID}}
+  STAGE_NAME: production
 
+jobs:
+  terraform:
+    name: 'terraform plan'
+    runs-on: ubuntu-latest
+    
     steps:
-    # Checkout the repository to the GitHub Actions runner
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
 
-    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup terraform
       uses: hashicorp/setup-terraform@v1
       with:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-
+  
     - name: terraform init
       run: terraform init
       working-directory: ${{ env.ROOT_PATH }}
@@ -78,3 +79,8 @@ defaults:
       run: terraform apply -auto-approve
       if: ${{inputs.tf_destroy}} == false
       working-directory: ${{ env.ROOT_PATH }}
+
+    # - name: terraform destroy
+    #   run: terraform destroy -auto-approve
+    #   if: ${{inputs.tf_destroy}} == true
+    #   working-directory: ${{ env.ROOT_PATH }}
