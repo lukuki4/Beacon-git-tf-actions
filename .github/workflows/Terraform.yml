@@ -27,6 +27,7 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+      uses: ./.github/lukuki4/Beacon-git-tf-actions 
 
     - name: 'terraform format'
       uses: hashicorp/lukuki4/Beacon-git-tf-actions 
