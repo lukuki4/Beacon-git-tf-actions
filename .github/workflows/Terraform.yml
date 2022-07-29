@@ -3,28 +3,27 @@ name: 'Becsme-Mig'
 on:
   push:
     branches:
-    - "main"
+      - main
+    paths:
+      - "/actions/Terraform/*"
   pull_request:
-
-permissions:
-  contents: read
-
+    branches:
+      - main
 jobs:
-  terraform:
-    name: 'Terraform'
+  terraform_plan:
+    name: 'terraform plan'
     runs-on: ubuntu-latest
-    environment: production
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
 defaults:
   run:
     shell: bash
 env: 
-  #ROOT_PATH: '${{github.workspace}}/actions/terraform-azure'
-  ARM_CLIENT_ID: ${{secrets.AZURE_CLIENT_ID}}
-  ARM_CLIENT_SECRET: ${{secrets.AZURE_CLIENT_SECRET}}
-  ARM_SUBSCRIPTION_ID: ${{secrets.AZURE_SUBSCRIPTION_ID}}
-  ARM_TENANT_ID: ${{secrets.AZURE_TENANT_ID}}
+  ROOT_PATH: '${{github.workspace}}/actions/Terraform'
+  ARM_CLIENT_ID: ${{secrets.AZURE_AD_CLIENT_ID}}
+  ARM_CLIENT_SECRET: ${{secrets.AZURE_AD_CLIENT_SECRET}}
+  ARM_SUBSCRIPTION_ID: ${{secrets.AZURE_AD_SUBSCRIPTION_ID}}
+  ARM_TENANT_ID: ${{secrets.AZURE_AD_TENANT_ID}}
   STAGE_NAME: production
 
     steps:
@@ -33,21 +32,18 @@ env:
       uses: actions/checkout@v3
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-    - name: Setup Terraform
-      uses: hashicorp/lukuki4/Beacon-git-tf-actions@master
-
+    - name: Setup terraform
+      uses: hashicorp/setup-terraform@v1
       with:
-        tf_actions_version: 0.14.8
-        tf_actions_subcommand: 'fmt'
-        tf_actions_working_dir: "./terraform"
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
     - name: terraform init
       run: terraform init
-      #working-directory: ${{ env.ROOT_PATH }}
+      working-directory: ${{ env.ROOT_PATH }}
 
     - name: terraform Plan
       run: terraform plan 
-      #working-directory: ${{ env.ROOT_PATH }}
+      working-directory: ${{ env.ROOT_PATH }}
       
 
   terraform_apply:
@@ -71,14 +67,14 @@ env:
  
     - name: terraform Init
       run: terraform init
-      #working-directory: ${{ env.ROOT_PATH }}
+      working-directory: ${{ env.ROOT_PATH }}
 
     - name: terraform Init
       run: echo 'var -> ${{inputs.tf_destroy}}'
-     # working-directory: ${{ env.ROOT_PATH }}
+      working-directory: ${{ env.ROOT_PATH }}
 
       #github.ref == 'refs/heads/main' && github.event_name == 'push'
     - name: terraform Apply
       run: terraform apply -auto-approve
       if: ${{inputs.tf_destroy}} == false
-      #working-directory: ${{ env.ROOT_PATH }}
+      working-directory: ${{ env.ROOT_PATH }}
