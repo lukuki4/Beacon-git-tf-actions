@@ -34,7 +34,20 @@ resource "azurerm_network_interface" "main" {
   ip_configuration {
     name                          = "beaconipconfig"
     subnet_id                     = azurerm_subnet.internal.id
-    private_ip_address_allocation = "Dynamic"
+    public_ip_address_allocation = "Dynamic"
+    public_ip_address_id = azurerm_public_ip.beaconpubid.id
+  }
+}
+
+resource "azurerm_public_ip" "example" {
+  name                = "beaconpubid"
+  resource_group_name = azurerm_resource_group.beaconsme_gp.name
+  location            = azurerm_resource_group.beaconsme_gp.location
+  allocation_method   = "Dynamic"
+  sku = "Basic"
+
+  tags = {
+    environment = "Production"
   }
 }
 
