@@ -39,7 +39,7 @@ resource "azurerm_network_interface" "main" {
   }
 }
 
-resource "azurerm_public_ip" "example" {
+resource "azurerm_public_ip" "beaconpubid" {
   name                = "beaconpubid"
   resource_group_name = azurerm_resource_group.beaconsme_gp.name
   location            = azurerm_resource_group.beaconsme_gp.location
