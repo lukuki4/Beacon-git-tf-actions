@@ -41,6 +41,12 @@ resource "azurerm_network_interface" "main" {
 }
 
 
+resource "azurerm_network_interface_security_group_association" "networkung" {
+  network_interface_id      = azurerm_network_interface.main.id
+  network_security_group_id = azurerm_network_security_group.becsme.id
+}
+
+
 resource "azurerm_network_security_group" "becsme" {
   name                = "beaconnsg"
   location            = azurerm_resource_group.beaconsmes_gp.location
