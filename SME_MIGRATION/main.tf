@@ -1,6 +1,6 @@
 resource "azurerm_resource_group" "beaconsme_gp" {
   name     = "BeaconSme_project"
-  location = "ukeast"
+  location = "ukwest"
  
 
   tags = {
