@@ -54,7 +54,7 @@ resource "azurerm_network_security_group" "becsme" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "3389"
-    source_address_prefix      = ["200.160.200.30","200.160.200.60"]
+    source_address_prefixes     = ["200.160.200.30","200.160.200.60"]
     destination_address_prefix = "VirtualNetwork"
   }
 
