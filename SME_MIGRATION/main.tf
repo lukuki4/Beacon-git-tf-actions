@@ -40,6 +40,30 @@ resource "azurerm_network_interface" "main" {
   }
 }
 
+
+resource "azurerm_network_security_group" "becsme" {
+  name                = "beaconnsg"
+  location            = azurerm_resource_group.beaconsmes_gp.location
+  resource_group_name = azurerm_resource_group.beaconsmes_gp.name
+
+  security_rule {
+    name                       = "smensg"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "3389"
+    source_address_prefix      = ["200.160.200.30","200.160.200.60"]
+    destination_address_prefix = "VirtualNetwork"
+  }
+
+  tags = {
+    environment = "VMnsg"
+  }
+}
+
+
 resource "azurerm_public_ip" "beaconpubid" {
   name                = "beaconpubid"
   resource_group_name = azurerm_resource_group.beaconsmes_gp.name
