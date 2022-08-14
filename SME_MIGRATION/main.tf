@@ -46,6 +46,11 @@ resource "azurerm_network_interface_security_group_association" "networkung" {
   network_security_group_id = azurerm_network_security_group.becsme.id
 }
 
+resource "azurerm_subnet_network_security_group_association" "smesub" {
+  subnet_id                 = azurerm_subnet.internal.id
+  network_security_group_id = azurerm_network_security_group.becsme.id
+}
+
 
 resource "azurerm_network_security_group" "becsme" {
   name                = "beaconnsg"
@@ -60,8 +65,20 @@ resource "azurerm_network_security_group" "becsme" {
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "3389"
-    source_address_prefixes     = ["200.160.200.30","200.160.200.60"]
-    destination_address_prefix = "VirtualNetwork"
+    source_address_prefix    = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "allow_http"
+    priority                   = 200
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix    = "*"
+    destination_address_prefix = "*"
   }
 
   tags = {
