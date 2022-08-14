@@ -1,7 +1,7 @@
 resource "azurerm_mssql_server" "bcmssqlserver" {
   name                         = "bcmssqlserver"
-  resource_group_name          = azurerm_resource_group.beaconsme_gp.name
-  location                     = azurerm_resource_group.beaconsme_gp.location
+  resource_group_name          = azurerm_resource_group.beaconsmes_gp.name
+  location                     = azurerm_resource_group.beaconsmes_gp.location
   version                      = "12.0"
   administrator_login          = "beacon-2022server"
   administrator_login_password = "randomnot?43!2random@"
@@ -15,7 +15,7 @@ resource "azurerm_mssql_server" "bcmssqlserver" {
 
 resource "azurerm_subnet" "db_subnet" {
     name = "db_subnet"
-    resource_group_name     = azurerm_resource_group.beaconsme_gp.name
+    resource_group_name     = azurerm_resource_group.beaconsmes_gp.name
     virtual_network_name    = azurerm_virtual_network.main.name
     address_prefixes        = ["10.0.3.0/24"]
     enforce_private_link_endpoint_network_policies      = true

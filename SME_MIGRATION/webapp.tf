@@ -1,7 +1,7 @@
 resource "azurerm_app_service_plan" "becsme" {  
   name                = "bcservice-plan"  
   location            = "uksouth"  
-  resource_group_name = azurerm_resource_group.beaconsme_gp.name  
+  resource_group_name = azurerm_resource_group.beaconsmes_gp.name  
   
   sku {  
     tier = "Standard"  
@@ -12,7 +12,7 @@ resource "azurerm_app_service_plan" "becsme" {
 resource "azurerm_app_service" "beaconsmeinc" {  
   name                = "BeaconSmeInc"  
   location            = "uksouth"  
-  resource_group_name = azurerm_resource_group.beaconsme_gp.name  
+  resource_group_name = azurerm_resource_group.beaconsmes_gp.name  
   app_service_plan_id = azurerm_app_service_plan.becsme.id  
   https_only = false
 

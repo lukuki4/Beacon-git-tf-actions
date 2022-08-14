@@ -1,7 +1,7 @@
 resource "azurerm_storage_account" "becstorage" {
   name                     = "bcsmestorage"
-  resource_group_name      = azurerm_resource_group.beaconsme_gp.name
-  location                 = azurerm_resource_group.beaconsme_gp.location
+  resource_group_name      = azurerm_resource_group.beaconsmes_gp.name
+  location                 = azurerm_resource_group.beaconsmes_gp.location
   account_tier             = "Standard"
   account_replication_type = "GRS"
 }
