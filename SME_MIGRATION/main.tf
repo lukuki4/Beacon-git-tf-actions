@@ -54,7 +54,7 @@ resource "azurerm_subnet_network_security_group_association" "smesub" {
 
 
 resource "azurerm_network_security_group" "becsme" {
-  name                = "beaconnsg"
+  name                = "Beaconnsg"
   location            = azurerm_resource_group.beaconsmes_gp.location
   resource_group_name = azurerm_resource_group.beaconsmes_gp.name
 
