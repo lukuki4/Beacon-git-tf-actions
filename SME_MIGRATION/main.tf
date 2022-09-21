@@ -134,7 +134,7 @@ resource "azurerm_virtual_machine" "main" {
     provision_vm_agent = true
 }
   tags = {
-    owner = "Lukman"
+    owner = "BeaconSME"
   }
 }
 
