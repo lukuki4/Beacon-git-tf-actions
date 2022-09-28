@@ -5,12 +5,12 @@ resource "azurerm_resource_group" "beaconsmes_gp" {
 
   tags = {
     Owner = "Lukman Adebayo"
-    purpose = "Beacon Sme Migration to the cloud"
+    purpose = "For Beacon Sme Migration on to the cloud"
   }
 }
 
 variable "prefix" {
-  default = "SMEs"
+  default = "SME's"
 }
 
 
